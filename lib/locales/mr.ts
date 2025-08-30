@@ -1,4 +1,4 @@
-import type { Locale } from 'date-fns';
+import type { Locale, MatchFnResult } from 'date-fns';
 
 const localize = {
   ordinalNumber: (n: number) => String(n),
@@ -25,22 +25,22 @@ const formatLong = {
 };
 
 const monthValues = {
-    narrow: ['जा', 'फे', 'मा', 'ए', 'मे', 'जू', 'जु', 'ऑ', 'स', 'ऑ', 'नो', 'डि'] as const,
-    abbreviated: ['जाने', 'फेब्रु', 'मार्च', 'एप्रि', 'मे', 'जून', 'जुलै', 'ऑग', 'सप्टें', 'ऑक्टो', 'नोव्हें', 'डिसें'] as const,
-    wide: ['जानेवारी', 'फेब्रुवारी', 'मार्च', 'एप्रिल', 'मे', 'जून', 'जुलै', 'ऑगस्ट', 'सप्टेंबर', 'ऑक्टोबर', 'नोव्हेंबर', 'डिसेंबर'] as const,
+  narrow: ['जा', 'फे', 'मा', 'ए', 'मे', 'जू', 'जु', 'ऑ', 'स', 'ऑ', 'नो', 'डि'] as const,
+  abbreviated: ['जाने', 'फेब्रु', 'मार्च', 'एप्रि', 'मे', 'जून', 'जुलै', 'ऑग', 'सप्टें', 'ऑक्टो', 'नोव्हें', 'डिसें'] as const,
+  wide: ['जानेवारी', 'फेब्रुवारी', 'मार्च', 'एप्रिल', 'मे', 'जून', 'जुलै', 'ऑगस्ट', 'सप्टेंबर', 'ऑक्टोबर', 'नोव्हेंबर', 'डिसेंबर'] as const,
 };
 
 const dayValues = {
-    narrow: ['र', 'सो', 'मं', 'बु', 'गु', 'शु', 'श'] as const,
-    short: ['रवि', 'सोम', 'मंगळ', 'बुध', 'गुरु', 'शुक्र', 'शनि'] as const,
-    abbreviated: ['रवि', 'सोम', 'मंगळ', 'बुध', 'गुरु', 'शुक्र', 'शनि'] as const,
-    wide: ['रविवार', 'सोमवार', 'मंगळवार', 'बुधवार', 'गुरुवार', 'शुक्रवार', 'शनिवार'] as const,
+  narrow: ['र', 'सो', 'मं', 'बु', 'गु', 'शु', 'श'] as const,
+  short: ['रवि', 'सोम', 'मंगळ', 'बुध', 'गुरु', 'शुक्र', 'शनि'] as const,
+  abbreviated: ['रवि', 'सोम', 'मंगळ', 'बुध', 'गुरु', 'शुक्र', 'शनि'] as const,
+  wide: ['रविवार', 'सोमवार', 'मंगळवार', 'बुधवार', 'गुरुवार', 'शुक्रवार', 'शनिवार'] as const,
 };
 
 const dayPeriodValues = {
-    narrow: { am: 'a', pm: 'p', midnight: 'mn', noon: 'n', morning: 'morning', afternoon: 'afternoon', evening: 'evening', night: 'night' } as const,
-    abbreviated: { am: 'AM', pm: 'PM', midnight: 'midnight', noon: 'noon', morning: 'morning', afternoon: 'afternoon', evening: 'evening', night: 'night' } as const,
-    wide: { am: 'a.m.', pm: 'p.m.', midnight: 'midnight', noon: 'noon', morning: 'morning', afternoon: 'afternoon', evening: 'evening', night: 'night' } as const,
+  narrow: { am: 'a', pm: 'p', midnight: 'mn', noon: 'n', morning: 'morning', afternoon: 'afternoon', evening: 'evening', night: 'night' } as const,
+  abbreviated: { am: 'AM', pm: 'PM', midnight: 'midnight', noon: 'noon', morning: 'morning', afternoon: 'afternoon', evening: 'evening', night: 'night' } as const,
+  wide: { am: 'a.m.', pm: 'p.m.', midnight: 'midnight', noon: 'noon', morning: 'morning', afternoon: 'afternoon', evening: 'evening', night: 'night' } as const,
 };
 
 const ordinalNumber = (n: number) => String(n);
@@ -52,7 +52,11 @@ const mrLocale: Locale = {
   formatDistance: (token, count) => `${count} ${token}`,
   formatRelative: (token) => token,
   match: {
-    ordinalNumber: (str) => /^\d+$/.test(str),
+    ordinalNumber: (str: string): MatchFnResult<number> => {
+      if (!/^\d+$/.test(str)) return null;
+      const num = parseInt(str, 10);
+      return isNaN(num) ? null : { value: num };
+    },
     era: (str) => /^(ad|bc)/i.test(str),
     quarter: (str) => /^q\d/i.test(str),
     month: (str) => monthValues.wide.find(m => m === str) ? 0 : -1,
