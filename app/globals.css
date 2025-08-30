@@ -1,0 +1,248 @@
+/* globals.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html, body, :root {
+  height: 100%;
+}
+
+/* Smooth scrolling for the entire page */
+html {
+  scroll-behavior: smooth;
+}
+
+/* White background for the entire app */
+body {
+  @apply bg-white text-gray-900 font-sans;
+}
+
+/* Main component styling */
+.main-component {
+  @apply bg-[#133a28] text-white rounded-md;
+}
+
+/* Navbar styling */
+header, nav {
+  @apply bg-[#133a28] text-white;
+}
+
+/* Sub-component elements (cards, inputs, selects, iframes, charts) */
+.card, input, select, iframe, .chart-container {
+  @apply bg-white text-gray-900 border-gray-300 rounded-md;
+}
+
+/* Modern scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-thumb {
+  @apply bg-gray-600 rounded-full;
+  box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+}
+::-webkit-scrollbar-track {
+  @apply bg-gray-200;
+}
+
+/* Text shadow for readability on dark backgrounds */
+.text-shadow {
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.6);
+}
+
+/* Simplified button styling */
+.btn-primary {
+  @apply bg-green-600 text-white font-medium rounded-md px-4 py-2 border border-green-700 shadow;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+.btn-primary:hover {
+  @apply bg-green-700 transform scale-105;
+}
+
+/* Input and select styling */
+input, select {
+  @apply bg-white text-gray-900 border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+input:focus, select:focus {
+  @apply transform scale-105;
+}
+
+/* Fade-in animation */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.fade-in {
+  animation: fadeIn 0.5s ease-out;
+}
+
+/* Glass card (for profile page, adjusted for white background) */
+.glass-card {
+  @apply bg-white rounded-xl shadow-md border border-gray-200;
+}
+
+/* Landing page specific styles */
+
+/* Hero section video background */
+.hero-video {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+}
+
+/* Gradient overlay for hero section */
+.hero-overlay {
+  background: linear-gradient(135deg, rgba(19, 58, 40, 0.8) 0%, rgba(34, 197, 94, 0.8) 100%);
+}
+
+/* Smooth transitions for all interactive elements */
+* {
+  transition: all 0.3s ease;
+}
+
+/* Button hover effects */
+.btn-landing {
+  @apply px-8 py-4 rounded-full font-medium transition-all transform hover:scale-105;
+}
+
+.btn-landing-primary {
+  @apply bg-green-600 text-white hover:bg-green-700;
+}
+
+.btn-landing-secondary {
+  @apply bg-white text-green-800 hover:bg-green-100;
+}
+
+.btn-landing-outline {
+  @apply border-2 border-white text-white hover:bg-white hover:text-green-800;
+}
+
+/* Section spacing */
+.section-padding {
+  @apply py-20;
+}
+
+/* Grid layouts for sections */
+.section-grid {
+  @apply grid md:grid-cols-2 gap-12 items-center;
+}
+
+/* Typography for landing page */
+.hero-title {
+  @apply text-6xl md:text-8xl font-light;
+}
+
+.section-title {
+  @apply text-4xl md:text-5xl font-light;
+}
+
+/* Card shadows and effects */
+.landing-card {
+  @apply rounded-lg shadow-2xl;
+}
+
+/* Navigation styles */
+.nav-blur {
+  backdrop-filter: blur(10px);
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Animation for scroll indicator */
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-10px);
+  }
+  60% {
+    transform: translateY(-5px);
+  }
+}
+
+.animate-bounce {
+  animation: bounce 2s infinite;
+}
+
+/* Responsive text sizing */
+@media (max-width: 768px) {
+  .hero-title {
+    @apply text-4xl md:text-6xl;
+  }
+  
+  .section-title {
+    @apply text-3xl md:text-4xl;
+  }
+}
+
+/* Hover effects for navigation links */
+.nav-link {
+  @apply text-white hover:text-green-300 transition-colors;
+}
+
+/* Footer link hover effects */
+.footer-link {
+  @apply hover:text-green-400 transition-colors;
+}
+
+/* Image hover effects */
+.image-hover {
+  @apply transition-transform hover:scale-105;
+}
+
+/* Background patterns */
+.bg-pattern {
+  background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23000000' fill-opacity='0.05'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+
+/* Custom scrollbar for webkit browsers */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 3px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* Loading animation */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+/* Gradient text effect */
+.gradient-text {
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Box shadow utilities */
+.shadow-soft {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.shadow-medium {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.shadow-strong {
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
