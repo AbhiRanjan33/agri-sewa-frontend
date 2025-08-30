@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start -p 3000",
     "lint": "eslint . --ext .ts,.tsx",
-    "install": "npm install --legacy-peer-deps"
+    "custom-install": "npm install --legacy-peer-deps"
   },
   "dependencies": {
     "@studio-freight/lenis": "^1.0.42",
