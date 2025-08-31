@@ -12,7 +12,7 @@ export async function POST(req: NextRequest) {
     }
 
     // Prepare the request to the backend
-    const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL ? `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/query` : 'http://localhost:8000/api/query';
+    const backendUrl = 'https://agri-sewa-backend-2.onrender.com/api/query';
     
     // Forward the FormData directly to the backend
     const response = await fetch(backendUrl, {

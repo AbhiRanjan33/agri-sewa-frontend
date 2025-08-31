@@ -28,7 +28,7 @@ export interface MarketDataResponse {
   };
 }
 
-const API_BASE = process.env.NEXT_PUBLIC_BACKEND_URL ? `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/data` : 'http://localhost:8000/api/data';
+const API_BASE = 'http://localhost:8000/api/data';
 
 // Get commodities from local data
 export function fetchCommodities(): Commodity[] {
