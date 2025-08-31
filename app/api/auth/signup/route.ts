@@ -1,6 +1,20 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getDb } from '@/lib/database'; // Import our new database function
-import bcrypt from 'bcrypt';
+
+// Simple in-memory user storage (in production, you'd use a real database)
+const users = [
+  {
+    username: 'admin',
+    password: 'password',
+    state_id: 8,
+    district_id: 104
+  },
+  {
+    username: 'test',
+    password: 'test123',
+    state_id: 8,
+    district_id: 104
+  }
+];
 
 export async function POST(req: NextRequest) {
   try {
@@ -9,23 +23,20 @@ export async function POST(req: NextRequest) {
     if (!username || !password || state_id === undefined || district_id === undefined) {
       return NextResponse.json({ message: 'Username, password, state_id, and district_id are required.' }, { status: 400 });
     }
-
-    // Get the database connection
-    const db = await getDb();
-
-    // Check if the user already exists in the database
-    const userExists = await db.get('SELECT * FROM users WHERE username = ?', username);
-
-    if (userExists) {
-      return NextResponse.json({ message: 'Username already exists.' }, { status: 409 });
+    
+    // Check if user already exists
+    const existingUser = users.find(u => u.username === username);
+    if (existingUser) {
+      return NextResponse.json({ message: 'Username already exists' }, { status: 409 });
     }
 
-    // Hash the password for security
-    const saltRounds = 10;
-    const passwordHash = await bcrypt.hash(password, saltRounds);
-
-    // Insert the new user into the database
-    await db.run('INSERT INTO users (username, passwordHash, state_id, district_id) VALUES (?, ?, ?, ?)', username, passwordHash, state_id, district_id);
+    // Add new user
+    users.push({
+      username,
+      password,
+      state_id,
+      district_id
+    });
 
     return NextResponse.json({ message: 'User created successfully' }, { status: 201 });
 
@@ -39,7 +50,7 @@ export async function OPTIONS(req: NextRequest) {
   return new NextResponse(null, {
     status: 200,
     headers: {
-      'Access-Control-Allow-Origin': '*', // Replace with your frontend domain
+      'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
       'Access-Control-Allow-Headers': 'Content-Type',
     },

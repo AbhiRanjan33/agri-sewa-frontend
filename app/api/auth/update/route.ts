@@ -1,51 +1,47 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getDb } from '@/lib/database';
-import bcrypt from 'bcrypt';
+
+// Simple in-memory user storage (in production, you'd use a real database)
+const users = [
+  {
+    username: 'admin',
+    password: 'password',
+    state_id: 8,
+    district_id: 104
+  },
+  {
+    username: 'test',
+    password: 'test123',
+    state_id: 8,
+    district_id: 104
+  }
+];
 
 export async function POST(req: NextRequest) {
   try {
     const { username, password, state_id, district_id } = await req.json();
-    const db = await getDb();
-    const user = await db.get('SELECT * FROM users WHERE username = ?', username);
 
-    if (!user) {
-      return NextResponse.json({ message: 'User not found' }, { status: 404 });
+    if (!username || state_id === undefined || district_id === undefined) {
+      return NextResponse.json({ message: 'Username, state_id, and district_id are required.' }, { status: 400 });
     }
 
-    // Build dynamic update query based on what's provided
-    let updateQuery = 'UPDATE users SET ';
-    let params: any[] = [];
-    let updates: string[] = [];
-
-    if (password) {
-      const saltRounds = 10;
-      const passwordHash = await bcrypt.hash(password, saltRounds);
-      updates.push('passwordHash = ?');
-      params.push(passwordHash);
+    // Find the user to update
+    const userIndex = users.findIndex(u => u.username === username);
+    if (userIndex === -1) {
+      return NextResponse.json({ message: 'User not found.' }, { status: 404 });
     }
 
-    if (state_id !== undefined) {
-      updates.push('state_id = ?');
-      params.push(state_id);
-    }
+    // Update the user
+    users[userIndex] = {
+      ...users[userIndex],
+      state_id,
+      district_id,
+      ...(password && { password }) // Only update password if provided
+    };
 
-    if (district_id !== undefined) {
-      updates.push('district_id = ?');
-      params.push(district_id);
-    }
+    return NextResponse.json({ message: 'User updated successfully' }, { status: 200 });
 
-    if (updates.length === 0) {
-      return NextResponse.json({ message: 'No fields to update' }, { status: 400 });
-    }
-
-    updateQuery += updates.join(', ') + ' WHERE username = ?';
-    params.push(username);
-
-    await db.run(updateQuery, ...params);
-
-    return NextResponse.json({ message: 'Profile updated successfully' }, { status: 200 });
   } catch (error) {
-    console.error('Update Error:', error);
+    console.error('Update User Error:', error);
     return NextResponse.json({ message: 'Internal Server Error' }, { status: 500 });
   }
 }
@@ -54,7 +50,7 @@ export async function OPTIONS(req: NextRequest) {
   return new NextResponse(null, {
     status: 200,
     headers: {
-      'Access-Control-Allow-Origin': '*', // Replace with your frontend domain
+      'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
       'Access-Control-Allow-Headers': 'Content-Type',
     },

@@ -1,8 +1,22 @@
 // File: app/api/auth/login/route.ts
 
 import { NextRequest, NextResponse } from 'next/server';
-import { getDb } from '@/lib/database'; // Import our new database function
-import bcrypt from 'bcrypt';
+
+// Simple in-memory user storage (in production, you'd use a real database)
+const users = [
+  {
+    username: 'admin',
+    password: 'password', // In production, use hashed passwords
+    state_id: 8,
+    district_id: 104
+  },
+  {
+    username: 'test',
+    password: 'test123',
+    state_id: 8,
+    district_id: 104
+  }
+];
 
 export async function POST(req: NextRequest) {
   try {
@@ -12,27 +26,22 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ message: 'Username and password are required.' }, { status: 400 });
     }
     
-    // Get the database connection
-    const db = await getDb();
+    // Find the user
+    const user = users.find(u => u.username === username && u.password === password);
 
-    // Find the user in the database
-    const user = await db.get('SELECT * FROM users WHERE username = ?', username);
-
-    // If no user is found, the credentials are invalid
     if (!user) {
       return NextResponse.json({ message: 'Invalid credentials' }, { status: 401 });
     }
 
-    // Compare the provided password with the stored hash
-    const passwordMatch = await bcrypt.compare(password, user.passwordHash);
-
-    if (passwordMatch) {
-      // If the passwords match, login is successful
-      return NextResponse.json({ message: 'Login successful' }, { status: 200 });
-    } else {
-      // If they don't match, the credentials are invalid
-      return NextResponse.json({ message: 'Invalid credentials' }, { status: 401 });
-    }
+    // Login successful
+    return NextResponse.json({ 
+      message: 'Login successful',
+      user: {
+        username: user.username,
+        state_id: user.state_id,
+        district_id: user.district_id
+      }
+    }, { status: 200 });
 
   } catch (error) {
     console.error('Login Error:', error);
@@ -44,7 +53,7 @@ export async function OPTIONS(req: NextRequest) {
   return new NextResponse(null, {
     status: 200,
     headers: {
-      'Access-Control-Allow-Origin': '*', // Replace with your frontend domain
+      'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
       'Access-Control-Allow-Headers': 'Content-Type',
     },
