@@ -1,4 +1,4 @@
-# Agri Sahayak - Agricultural Assistant
+# Agri Sewa - Agricultural Assistant
 
 A comprehensive AI-powered agricultural assistant platform with multi-language support, market data visualization, and weather forecasting capabilities.
 
