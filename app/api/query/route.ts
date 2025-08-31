@@ -12,7 +12,7 @@ export async function POST(req: NextRequest) {
     }
 
     // Prepare the request to the backend
-    const backendUrl = '`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/query`';
+    const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL ? `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/query` : 'http://localhost:8000/api/query';
     
     // Forward the FormData directly to the backend
     const response = await fetch(backendUrl, {

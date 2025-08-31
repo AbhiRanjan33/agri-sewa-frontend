@@ -22,7 +22,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const fetchUserData = async (username: string) => {
     try {
-      const response = await fetch(`/api/auth/user?username=${encodeURIComponent(username)}`);
+      const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000';
+      const response = await fetch(`${backendUrl}/api/auth/user?username=${encodeURIComponent(username)}`);
       if (response.ok) {
         const userData = await response.json();
         setUser(userData);
@@ -45,7 +46,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const signup = async (username: string, pass: string, state_id: number, district_id: number): Promise<boolean> => {
     try {
-      const response = await fetch('/api/auth/signup', {
+      const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000';
+      const response = await fetch(`${backendUrl}/api/auth/signup`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password: pass, state_id, district_id }),
@@ -66,7 +68,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const login = async (username: string, pass: string): Promise<boolean> => {
     try {
-      const response = await fetch('/api/auth/login', {
+      const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000';
+      const response = await fetch(`${backendUrl}/api/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password: pass }),
@@ -97,7 +100,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const updateUser = async (userData: { username: string, password?: string, state_id: number, district_id: number }): Promise<boolean> => {
     try {
-      const response = await fetch('/api/auth/update', {
+      const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000';
+      const response = await fetch(`${backendUrl}/api/auth/update`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(userData),
